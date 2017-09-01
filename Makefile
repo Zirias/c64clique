@@ -5,7 +5,7 @@ C64LD?=ld65
 C64ASFLAGS?=-t $(C64SYS) -g
 C64LDFLAGS?=-Ln clique.lbl -m clique.map -Csrc/clique.cfg
 
-clique_OBJS:=$(addprefix obj/,main.o input.o numconv.o nodes.o edges.o)
+clique_OBJS:=$(addprefix obj/,main.o input.o numconv.o nodes.o edges.o clique.o)
 clique_BIN:=clique.prg
 
 all: $(clique_BIN)

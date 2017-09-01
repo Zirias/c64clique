@@ -52,6 +52,45 @@ stn_nosub:	dey
 		bmi	stn_loop
 
 numtostring:
+		ldx	#$6
+		lda	#$0
+nts_fillzero:	sta	nc_string-1,x
+		dex
+		bne	nts_fillzero
+		ldx	#$10
+nts_bcdloop:	ldy	#$4
+nts_addloop:	lda	nc_string+1,y
+		cmp	#$5
+		bmi	nts_noadd
+		adc	#$2
+		sta	nc_string+1,y
+nts_noadd:	dey
+		bpl	nts_addloop
+		ldy	#$4
+		asl	nc_num
+		rol	nc_num+1
+nts_rolloop:	lda	nc_string+1,y
+		rol	a
+		cmp	#$10
+		and	#$f
+		sta	nc_string+1,y
+nts_rolnext:	dey
+		bpl	nts_rolloop
+		dex
+		bne	nts_bcdloop
+nts_scan:	iny
+		lda	nc_string,y
+		beq	nts_scan
+nts_copydigits:	ora	#$30
+		sta	nc_string,x
+		inx
+		iny
+		cpy	#$6
+		beq	nts_done
+		lda	nc_string,y
+		bcc	nts_copydigits
+nts_done:	lda	#$0
+		sta	nc_string,x
 		rts
 
 .bss

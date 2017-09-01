@@ -1,7 +1,14 @@
 .export addnode
+.export printnode
+.export permutatenodes
+.export numnodes
+.export nodesidx
 
 .import inputnum1
 .import inputnum2
+.import numtostring
+.import nc_num
+.import nc_string
 
 .code
 
@@ -29,16 +36,57 @@ an_appendok:	lda	nodetmpl
 		txa
 		sta	nodesh,y
 		tya
+		sta	nodesidx,y
 		clc
 		rts
 
+permutatenodes:
+		ldx	permcnt
+		cpx	numnodes
+		bmi	pn_start
+		rts
+pn_start:	lda	permtmp,x
+		cmp	permcnt
+		bmi	pn_swap
+		lda	#$0
+		sta	permtmp,x
+		inc	permcnt
+		bne	permutatenodes
+pn_swap:	tay
+		inc	permtmp,x
+		txa
+		and	#$1
+		bne	pn_swapi
+		ldy	#$0
+pn_swapi:	lda	nodesidx,x
+		eor	nodesidx,y
+		sta	nodesidx,x
+		eor	nodesidx,y
+		sta	nodesidx,y
+		eor	nodesidx,x
+		sta	nodesidx,x
+		lda	#$0
+		sta	permcnt
+		clc
+		rts
 
+printnode:
+		lda	nodesl,x
+		sta	nc_num
+		lda	nodesh,x
+		sta	nc_num+1
+		jsr	numtostring
+		lda	#<nc_string
+		ldy	#>nc_string
+		jmp	$ab1e
 
 .bss
-numnodes:	.res	1
-nodetmpl:	.res	1
 
-.segment "NODES"
+numnodes:	.res	1	; number of total nodes
+nodetmpl:	.res	1	; temporary for node low-byte
+permcnt:	.res	1	; temporary counter for permutations
+nodesl:		.res	$100	; low-bytes of node ids
+nodesh:		.res	$100	; high-bytes of node ids
+nodesidx:	.res	$100	; indexes of nodes for permutations
+permtmp:	.res	$100	; temporary array for doing permutations
 
-nodesl:		.res	$100
-nodesh:		.res	$100
