@@ -1,13 +1,10 @@
 .export buildclique
-.export printclique
+.export cliquesize
 
 .import numnodes
 .import printnode
 .import nodesidx
 .import edgeexists
-.import numtostring
-.import nc_num
-.import nc_string
 
 .code
 
@@ -52,36 +49,6 @@ bc_done:	rts
 bc_next:	ldy	#$0
 		sty	cliquepos
 		beq	bc_loop
-
-printclique:
-		lda	#$0
-		sta	cliquepos
-		sta	nc_num+1
-		lda	cliquesize
-		sta	nc_num
-		jsr	numtostring
-		lda	#<nc_string
-		ldy	#>nc_string
-		jsr	$ab1e
-		lda	#' '
-		jsr	$f1ca
-		lda	#'['
-		jsr	$f1ca
-pc_loop:	ldx	cliquepos
-		lda	clique,x
-		tax
-		jsr	printnode
-		inc	cliquepos
-		ldx	cliquepos
-		cpx	cliquesize
-		beq	pc_done
-		lda	#','
-		jsr	$f1ca
-		bcc	pc_loop
-pc_done:	lda	#']'
-		jsr	$f1ca
-		lda	#$d
-		jmp	$f1ca
 
 .bss
 

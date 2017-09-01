@@ -1,5 +1,4 @@
 .export addnode
-.export printnode
 .export permutatenodes
 .export numnodes
 .export nodesidx
@@ -69,16 +68,6 @@ pn_swapi:	lda	nodesidx,x
 		sta	permcnt
 		clc
 		rts
-
-printnode:
-		lda	nodesl,x
-		sta	nc_num
-		lda	nodesh,x
-		sta	nc_num+1
-		jsr	numtostring
-		lda	#<nc_string
-		ldy	#>nc_string
-		jmp	$ab1e
 
 .bss
 

@@ -57,7 +57,7 @@ numtostring:
 nts_fillzero:	sta	nc_string-1,x
 		dex
 		bne	nts_fillzero
-		ldx	#$10
+		ldx	#$8
 nts_bcdloop:	ldy	#$4
 nts_addloop:	lda	nc_string+1,y
 		cmp	#$5
@@ -68,7 +68,6 @@ nts_noadd:	dey
 		bpl	nts_addloop
 		ldy	#$4
 		asl	nc_num
-		rol	nc_num+1
 nts_rolloop:	lda	nc_string+1,y
 		rol	a
 		cmp	#$10

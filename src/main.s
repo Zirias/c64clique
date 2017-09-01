@@ -5,7 +5,10 @@
 .import permutatenodes
 .import addedge
 .import buildclique
-.import printclique
+.import cliquesize
+.import numtostring
+.import nc_num
+.import nc_string
 
 .import __BSS_LOAD__
 .import __BSS_SIZE__
@@ -55,25 +58,19 @@ edgefirstnode	= *+1
 		bcc	inputloop
 
 findclique:
-		sei
-		lda	#$5
-		sta	$1
-		lda	$d020
-		sta	bordercol
 		jsr	buildclique
-testnextperm:	inc	$d020
-		jsr	permutatenodes
+testnextperm:	jsr	permutatenodes
 		bcs	outputresult
 		jsr	buildclique
 		bvc	testnextperm
 
 outputresult:
-		lda	#$7
-		sta	$1
-		cli
-		lda	bordercol
-		sta	$d020
-		jsr	printclique
+		lda	cliquesize
+		sta	nc_num
+		jsr	numtostring
+		lda	#<nc_string
+		lda	#>nc_string
+		jsr	$ab1e
 error:
 		rts
 
