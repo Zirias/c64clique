@@ -16,7 +16,7 @@ ae_numok:	sta	ae_destal
 		lda	numedges+1
 		ora	#>edgesa
 		sta	ae_destah
-		ora	#>edgesb
+		eor	#$e0
 		sta	ae_destbh
 ae_destal	= *+1
 ae_destah	= *+2
@@ -51,7 +51,7 @@ ee_check:	lda	edgepos+1
 		ora	#>edgesa
 		sta	ee_cpx1h
 		sta	ee_cpy2h
-		ora	#>edgesb
+		eor	#$e0
 		sta	ee_cpx2h
 		sta	ee_cpy1h
 ee_cpx1l	= *+1

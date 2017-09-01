@@ -69,7 +69,7 @@ outputresult:
 		sta	nc_num
 		jsr	numtostring
 		lda	#<nc_string
-		lda	#>nc_string
+		ldy	#>nc_string
 		jsr	$ab1e
 error:
 		rts
