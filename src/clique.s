@@ -1,13 +1,20 @@
 .export buildclique
 .export printclique
 
-.import numnodes
+.importzp numnodes
 .import printnode
 .import nodesidx
 .import edgeexists
 .import numtostring
 .import nc_num
 .import nc_string
+
+.segment "ZPHIGH": zeropage
+
+cliquesize:	.res	1
+newsize:	.res	1
+nodepos:	.res	1
+cliquepos:	.res	1
 
 .code
 
@@ -85,10 +92,6 @@ pc_done:	lda	#']'
 
 .bss
 
-cliquesize:	.res	1
-newsize:	.res	1
-nodepos:	.res	1
-cliquepos:	.res	1
 clique:		.res	$100
 newclique:	.res	$100
 
