@@ -31,52 +31,45 @@ ae_ok:		clc
 ae_error:	rts
 
 edgeexists:
+		stx	eevala
+		sty	eevalb
 		lda	numedges+1
-		sta	edgepos+1
-		lda	numedges
-		sta	edgepos
-ee_loop:	dec	edgepos
-		lda	edgepos
-		sta	ee_cpx1l
-		sta	ee_cpx2l
-		sta	ee_cpy1l
-		sta	ee_cpy2l
-		cmp	#$ff
+		ora	#>edgesa
+		sta	ee_ldea
+		eor	#(>edgesa ^ >edgesb)
+		sta	ee_ldeb
+		ldx	numedges
+ee_loop:	dex
+		cpx	#$ff
 		bne	ee_check
-		dec	edgepos+1
-		bpl	ee_check
+		ldy	ee_ldea
+		dey
+		cpy	#>edgesa
+		bpl	ee_nextpage
 		clc
 		rts
-ee_check:	lda	edgepos+1
-		ora	#>edgesa
-		sta	ee_cpx1h
-		sta	ee_cpy2h
-		eor	#$e0
-		sta	ee_cpx2h
-		sta	ee_cpy1h
-ee_cpx1l	= *+1
-ee_cpx1h	= *+2
-		cpx	$ffff
-		bne	ee_check2
-ee_cpy1l	= *+1
-ee_cpy1h	= *+2
-		cpy	$ffff
-		beq	ee_found
-ee_cpx2l	= *+1
-ee_cpx2h	= *+2
-ee_check2:	cpx	$ffff
+ee_nextpage:	sty	ee_ldea
+		dec	ee_ldeb
+ee_ldea		= *+2
+ee_check:	lda	$ff00,x
+		cmp	eevala
+		beq	ee_check2
+		cmp	eevalb
 		bne	ee_loop
-ee_cpy2l	= *+1
-ee_cpy2h	= *+2
-		cpy	$ffff
+ee_ldeb		= *+2
+ee_check2:	lda	$ff00,x
+		cmp	eevala
+		beq	ee_found
+		cmp	eevalb
 		bne	ee_loop
 ee_found:	sec
 		rts
-		
+
 .bss
 
 numedges:	.res	2
-edgepos:	.res	2
+eevala:		.res	1
+eevalb:		.res	1
 
 .segment "EDGESA"
 
