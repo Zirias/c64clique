@@ -1,6 +1,12 @@
 .export addedge
 .export edgeexists
 
+.segment "ZPLOW": zeropage
+
+numedges:	.res	2
+eevala:		.res	1
+eevalb:		.res	1
+
 .code
 
 addedge:
@@ -64,12 +70,6 @@ ee_check2:	lda	$ff00,x
 		bne	ee_loop
 ee_found:	sec
 		rts
-
-.bss
-
-numedges:	.res	2
-eevala:		.res	1
-eevalb:		.res	1
 
 .segment "EDGESA"
 

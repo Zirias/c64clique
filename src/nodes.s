@@ -1,6 +1,6 @@
 .export addnode
 .export permutatenodes
-.export numnodes
+.exportzp numnodes
 .export nodesidx
 
 .import inputnum1
@@ -8,6 +8,12 @@
 .import numtostring
 .import nc_num
 .import nc_string
+
+.segment "ZPLOW": zeropage
+
+numnodes:	.res	1	; number of total nodes
+nodetmpl:	.res	1	; temporary for node low-byte
+permcnt:	.res	1	; temporary counter for permutations
 
 .code
 
@@ -71,9 +77,6 @@ pn_swapi:	lda	nodesidx,x
 
 .bss
 
-numnodes:	.res	1	; number of total nodes
-nodetmpl:	.res	1	; temporary for node low-byte
-permcnt:	.res	1	; temporary counter for permutations
 nodesl:		.res	$100	; low-bytes of node ids
 nodesh:		.res	$100	; high-bytes of node ids
 nodesidx:	.res	$100	; indexes of nodes for permutations

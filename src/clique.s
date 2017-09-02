@@ -1,10 +1,17 @@
 .export buildclique
 .export cliquesize
 
-.import numnodes
+.importzp numnodes
 .import printnode
 .import nodesidx
 .import edgeexists
+
+.segment "ZPHIGH": zeropage
+
+cliquesize:	.res	1
+newsize:	.res	1
+nodepos:	.res	1
+cliquepos:	.res	1
 
 .code
 
@@ -52,10 +59,6 @@ bc_next:	ldy	#$0
 
 .bss
 
-cliquesize:	.res	1
-newsize:	.res	1
-nodepos:	.res	1
-cliquepos:	.res	1
 clique:		.res	$100
 newclique:	.res	$100
 

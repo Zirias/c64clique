@@ -5,39 +5,35 @@
 .import permutatenodes
 .import addedge
 .import buildclique
-.import cliquesize
+.importzp cliquesize
 .import numtostring
 .import nc_num
 .import nc_string
 
-.import __BSS_LOAD__
-.import __BSS_SIZE__
+.import __ZPLOW_LOAD__
+.import __ZPLOW_SIZE__
+.import __ZPHIGH_LOAD__
+.import __ZPHIGH_SIZE__
 
 .segment "LDADDR"
                 .word   $c000
 
+.segment "ZPLOW": zeropage
+
+bordercol:	.res	1
+
 .segment "INIT"
 
-		; clear bss
+		; clear zp segments
 		lda	#$0
-		tax
-		ldy	#>__BSS_LOAD__
-		sty	bc_page
-		ldy	#>__BSS_SIZE__
-bc_page		= *+2
-bc_loop:	sta	__BSS_LOAD__,x
-		inx
-		beq	bc_nextpage
-		cpy	#$0
-		bne	bc_loop
-		cpx	#<__BSS_SIZE__
-		bne	bc_loop
-		jmp	main
-bc_nextpage:	dey
-		inc	bc_page
-		bne	bc_loop
-
-.code
+		ldx	#<__ZPLOW_SIZE__
+zpc_low:	sta	__ZPLOW_LOAD__,x
+		dex
+		bpl	zpc_low
+		ldx	#<__ZPHIGH_SIZE__
+zpc_high:	sta	__ZPHIGH_LOAD__,x
+		dex
+		bpl	zpc_high
 
 main:
 
@@ -74,6 +70,3 @@ outputresult:
 error:
 		rts
 
-.bss
-
-bordercol:	.res	1
